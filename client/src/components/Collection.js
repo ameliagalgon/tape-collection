@@ -26,8 +26,8 @@ class Collection extends Component{
         { this.state.albums.map(album => {
           //console.log(album.album);
           return(
-            <Cassette id={album.album.id} title={album.album.name} artist={album.album.artists[0].name}
-            albumArt={album.album.images[0].url}/>
+            <Cassette key={album.album.id} id={album.album.id} title={album.album.name} artist={album.album.artists[0].name}
+            albumArt={album.album.images[1].url}/>
           );
         })}
       </div>

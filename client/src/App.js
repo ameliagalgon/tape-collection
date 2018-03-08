@@ -6,6 +6,7 @@ import SpotifyWebApi from 'spotify-web-api-js'
 
 //components
 import Welcome from './components/Welcome'
+import User from './components/User'
 
 const spotifyApi = new SpotifyWebApi();
 
@@ -24,6 +25,7 @@ class App extends Component {
   }
 
   getHashParams(){
+    //window.location.hash = '';
     var hashParams = {};
     var e, r = /([^&;=]+)=?([^&;]*)/g,
         q = window.location.hash.substring(1);
@@ -35,13 +37,28 @@ class App extends Component {
     return hashParams;
   }
 
+  getCurrentUser(){
+    var user = spotifyApi.getMe().then(function(response){
+      console.log(response);
+      return response;
+    }).catch(function(){
+      console.log("Error");
+    });
+    console.log(user);
+    if(user){
+      console.log("in if statement");
+      console.log(user.value);
+    }
+    return user;
+  }
+
 
   render() {
     return (
       <div className='App'>
         { !this.state.loggedIn &&
           <div>
-          <Welcome callback={this.handleLogin}/>
+          <Welcome />
           <div className="login">
             <a href="http://localhost:8888">Login to Spotify</a>
           </div>
@@ -49,7 +66,8 @@ class App extends Component {
         }
         { this.state.loggedIn &&
           <div className="App-content">
-            App-content
+
+            <User user={ this.getCurrentUser() } />
           </div>
         }
       </div>

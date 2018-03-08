@@ -2,11 +2,11 @@ import React, { Component } from 'react';
 //import gear from './images/gear.png';
 import './App.css';
 import SpotifyWebApi from 'spotify-web-api-js'
-//import Collection from './components/Collection'
 
 //components
 import Welcome from './components/Welcome'
 import User from './components/User'
+import Collection from './components/Collection'
 
 const spotifyApi = new SpotifyWebApi();
 
@@ -52,6 +52,21 @@ class App extends Component {
     return user;
   }
 
+  getSavedAlbums(){
+    var savedAlbums = spotifyApi.getMySavedAlbums({
+      limit: 50,
+      offset: 0
+    })
+    .then(function(data) {
+      // Output items
+      console.log(data);
+      return data.items;
+    }, function(err) {
+      console.log('Something went wrong!', err);
+    });
+    return savedAlbums;
+  }
+
 
   render() {
     return (
@@ -66,8 +81,8 @@ class App extends Component {
         }
         { this.state.loggedIn &&
           <div className="App-content">
-
             <User user={ this.getCurrentUser() } />
+            <Collection albums={ this.getSavedAlbums() } />
           </div>
         }
       </div>

@@ -1,8 +1,11 @@
 import React, { Component } from 'react';
-import gear from './images/gear.png';
+//import gear from './images/gear.png';
 import './App.css';
 import SpotifyWebApi from 'spotify-web-api-js'
-import Collection from './components/Collection'
+//import Collection from './components/Collection'
+
+//components
+import Welcome from './components/Welcome'
 
 const spotifyApi = new SpotifyWebApi();
 
@@ -10,20 +13,17 @@ class App extends Component {
 
   constructor(){
     super();
-    const params = this.getHashParams();
-    console.log(params);
-    const token = params.access_token;
-    if(token){
+    var params = this.getHashParams();
+    var token = params.access_token;
+    if (token) {
       spotifyApi.setAccessToken(token);
     }
     this.state = {
-      loggedIn: token ? true : false,
-      nowPlaying: { name: 'Not Checked', albumArt: ''}
+      loggedIn : token ? true : false
     }
   }
 
   getHashParams(){
-    //window.location.hash = '';
     var hashParams = {};
     var e, r = /([^&;=]+)=?([^&;]*)/g,
         q = window.location.hash.substring(1);
@@ -35,57 +35,23 @@ class App extends Component {
     return hashParams;
   }
 
-  getNowPlaying(){
-    spotifyApi.getMyCurrentPlaybackState()
-      .then((response) => {
-        this.setState({
-          nowPlaying: {
-            name: response.item.name,
-            albumArt: response.item.album.images[0].url
-          }
-        })
-      })
-  }
-
-  getCollection(options){
-    spotifyApi.getMySavedAlbums(options)
-      .then((response) => {
-        Collection.setState({
-          albums: response.item
-        })
-      })
-  }
 
   render() {
     return (
       <div className='App'>
         { !this.state.loggedIn &&
-          <div className="welcome">
-            <h4>Welcome to</h4>
-            <h1 className="title">Tape Collection</h1>
-            <p>Your virtual cassette collection</p>
-            <div className="signin">
-              <a href="http://localhost:8888">Login to Spotify</a>
-            </div>
+          <div>
+          <Welcome callback={this.handleLogin}/>
+          <div className="login">
+            <a href="http://localhost:8888">Login to Spotify</a>
+          </div>
           </div>
         }
         { this.state.loggedIn &&
           <div className="App-content">
-            <div>
-              Now Playing: { this.state.nowPlaying.name }
-            </div>
-            <div>
-              <img src={this.state.nowPlaying.albumArt} style={{ height: 150 }}/>
-            </div>
-            <button onClick={() => this.getNowPlaying()}>
-              Check Now Playing
-            </button>
+            App-content
           </div>
         }
-        <button onClick={() => this.getCollection()}>
-          Get collection
-        </button>
-        <Collection></Collection>
       </div>
     );
   }

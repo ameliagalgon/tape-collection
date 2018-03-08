@@ -1,10 +1,8 @@
 import React, { Component } from 'react';
 import gear from './images/gear.png';
 import './App.css';
-import Request from 'superagent';
-
 import SpotifyWebApi from 'spotify-web-api-js'
-//import User from './components/User';
+import Collection from './components/Collection'
 
 const spotifyApi = new SpotifyWebApi();
 
@@ -25,6 +23,7 @@ class App extends Component {
   }
 
   getHashParams(){
+    //window.location.hash = '';
     var hashParams = {};
     var e, r = /([^&;=]+)=?([^&;]*)/g,
         q = window.location.hash.substring(1);
@@ -44,6 +43,15 @@ class App extends Component {
             name: response.item.name,
             albumArt: response.item.album.images[0].url
           }
+        })
+      })
+  }
+
+  getCollection(options){
+    spotifyApi.getMySavedAlbums(options)
+      .then((response) => {
+        Collection.setState({
+          albums: response.item
         })
       })
   }
@@ -74,6 +82,10 @@ class App extends Component {
             </button>
           </div>
         }
+        <button onClick={() => this.getCollection()}>
+          Get collection
+        </button>
+        <Collection></Collection>
       </div>
     );
   }

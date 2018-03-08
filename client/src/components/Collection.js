@@ -22,8 +22,14 @@ class Collection extends Component{
   render(){
     return (
       <div className="Collection">
-        //TODO: FIX ERROR: Cannot read property 'album' of undefined
-        <Cassette title={ this.state.albums[0].album.name} />
+        <h2>Tape Collection</h2>
+        { this.state.albums.map(album => {
+          //console.log(album.album);
+          return(
+            <Cassette id={album.album.id} title={album.album.name} artist={album.album.artists[0].name}
+            albumArt={album.album.images[0].url}/>
+          );
+        })}
       </div>
     )
   }

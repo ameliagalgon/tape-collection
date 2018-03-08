@@ -4,17 +4,19 @@ class Cassette extends Component{
   constructor(){
     super();
     this.state = {
-      title: '',
-      albumArt: '',
-      artist: '',
-      albumID: ''
+
     }
   }
 
-  componentWillMount(){
-    this.props.title.then(title => {
-      this.setState({title});
-    });
+
+  render(){
+    return(
+      <div className="Cassette">
+        <img src={this.props.albumArt} />
+        <h1>{this.props.title}</h1>
+        <h3>{this.props.artist}</h3>
+      </div>
+    );
   }
 }
 

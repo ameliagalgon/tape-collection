@@ -7,7 +7,8 @@
  * https://developer.spotify.com/web-api/authorization-guide/#authorization_code_flow
  */
 
-require('dotenv').config()
+require('dotenv').config();
+const path = require('path');
 
 var express = require('express'); // Express web server framework
 var request = require('request'); // "Request" library
@@ -39,6 +40,12 @@ var app = express();
 
 app.use(express.static(__dirname + '/public'))
    .use(cookieParser());
+
+app.use(express.static(path.join(__dirname, '../client/build')));
+
+app.get('/', function (req, res) {
+  res.sendFile(path.join(__dirname, '../client/build', 'index.html'));
+});
 
 app.get('/login', function(req, res) {
 

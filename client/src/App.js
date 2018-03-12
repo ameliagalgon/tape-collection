@@ -2,11 +2,13 @@ import React, { Component } from 'react';
 //import gear from './images/gear.png';
 import './App.css';
 import SpotifyWebApi from 'spotify-web-api-js'
+import { BrowserRouter as Router, Route } from 'react-router-dom'
 
 //components
 import Welcome from './components/Welcome'
 import User from './components/User'
 import Collection from './components/Collection'
+import Menu from './components/Menu'
 
 const spotifyApi = new SpotifyWebApi();
 
@@ -70,22 +72,32 @@ class App extends Component {
 
   render() {
     return (
-      <div className='App'>
-        { !this.state.loggedIn &&
-          <div>
-          <Welcome />
-          <div className="login">
-            <a href="http://localhost:8888/login">Login to Spotify</a>
-          </div>
-          </div>
-        }
-        { this.state.loggedIn &&
-          <div className="App-content">
-            <User user={ this.getCurrentUser() } />
-            <Collection albums={ this.getSavedAlbums() } />
-          </div>
-        }
-      </div>
+      <Router>
+        <div className='App'>
+          { !this.state.loggedIn &&
+            <div>
+            <Welcome />
+            <div className="login">
+              <a href="http://localhost:8888/login">Login to Spotify</a>
+            </div>
+            </div>
+          }
+          { this.state.loggedIn &&
+            <div className="App-content">
+              <User user={ this.getCurrentUser() } />
+              <Menu />
+              <Route exact={true} path="/" render={() => (
+                <h1>Home</h1>
+              )} />
+              <Route path="/collection" render={() =>(
+                <Collection albums={ this.getSavedAlbums() } />
+              )} />
+
+            </div>
+
+          }
+        </div>
+      </Router>
     );
   }
     /*

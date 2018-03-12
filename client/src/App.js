@@ -9,6 +9,7 @@ import Welcome from './components/Welcome'
 import User from './components/User'
 import Collection from './components/Collection'
 import Menu from './components/Menu'
+import Search from './components/Search'
 
 const spotifyApi = new SpotifyWebApi();
 
@@ -92,7 +93,9 @@ class App extends Component {
               <Route path="/collection" render={() =>(
                 <Collection albums={ this.getSavedAlbums() } />
               )} />
-
+              <Route path="/search" render={() =>(
+                <Search />
+              )} />
             </div>
 
           }

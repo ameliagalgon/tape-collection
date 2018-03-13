@@ -9,7 +9,7 @@ import Welcome from './components/Welcome'
 import User from './components/User'
 import Collection from './components/Collection'
 import Menu from './components/Menu'
-import Search from './components/Search'
+import SearchBar from './components/SearchBar'
 
 const spotifyApi = new SpotifyWebApi();
 
@@ -18,6 +18,7 @@ class App extends Component {
   constructor(){
     super();
     var params = this.getHashParams();
+    console.log(params);
     var token = params.access_token;
     if (token) {
       spotifyApi.setAccessToken(token);
@@ -70,6 +71,15 @@ class App extends Component {
     return savedAlbums;
   }
 
+  handleSearch(query){
+    console.log("query: ", query)
+    spotifyApi.searchTracks(query).then(function(data) {
+      console.log(data);
+    }, function(err) {
+      console.error(err);
+    });
+  }
+
 
   render() {
     return (
@@ -94,7 +104,12 @@ class App extends Component {
                 <Collection albums={ this.getSavedAlbums() } />
               )} />
               <Route path="/search" render={() =>(
-                <Search />
+                <div className="Search">
+                  <SearchBar callback={ this.handleSearch() }/>
+                  <div className="returnItems">
+                    { this.handleSearch('love') }
+                  </div>
+                </div>
               )} />
             </div>
 

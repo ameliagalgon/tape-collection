@@ -101,7 +101,7 @@ app.get('/callback', function(req, res) {
             refresh_token = body.refresh_token;
 
         var options = {
-          url: 'https://api.spotify.com/v1/me',
+          url: 'https://api.spotify.com/v1/search?q=hello&type=track',
           headers: { 'Authorization': 'Bearer ' + access_token },
           json: true
         };

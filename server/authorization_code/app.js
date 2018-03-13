@@ -100,6 +100,9 @@ app.get('/callback', function(req, res) {
         var access_token = body.access_token,
             refresh_token = body.refresh_token;
 
+        console.log("ACCESS_TOKEN: ", access_token)
+
+        //search for tracks using the query 'hello'
         var options = {
           url: 'https://api.spotify.com/v1/search?q=hello&type=track',
           headers: { 'Authorization': 'Bearer ' + access_token },
@@ -116,7 +119,7 @@ app.get('/callback', function(req, res) {
         });
 
         // we can also pass the token to the browser to make requests from there
-        res.redirect('http://localhost:3000/' +
+        res.redirect('http://localhost:3000/#' +
           querystring.stringify({
             access_token: access_token,
             refresh_token: refresh_token

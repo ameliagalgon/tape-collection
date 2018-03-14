@@ -9,6 +9,7 @@ class SearchBar extends Component{
     }
 
     this.handleChange = this.handleChange.bind(this);
+    //this.props.callback = this.props.callback.bind(this)
   }
 
 
@@ -21,7 +22,12 @@ class SearchBar extends Component{
   componentDidUpdate(){
     console.log(this.state.query);
     //perform a query search
-
+    //handleSearch(this.state.query);
+    /*
+    this.props.searchFunc.then(function(){
+      console.log("hello");
+    })
+    */
   }
 
   render(){
@@ -30,7 +36,6 @@ class SearchBar extends Component{
         <h1>Search</h1>
         <form onChange={this.handleChange}>
           <input type="text" name="query" placeholder="Search..." />
-          <input type="submit" value="Search" />
         </form>
       </div>
     );

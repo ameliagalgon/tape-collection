@@ -105,9 +105,9 @@ class App extends Component {
               )} />
               <Route path="/search" render={() =>(
                 <div className="Search">
-                  <SearchBar callback={ this.handleSearch() }/>
+                  <SearchBar searchFunc={ this.handleSearch('love') }/>
                   <div className="returnItems">
-                    { this.handleSearch('love') }
+
                   </div>
                 </div>
               )} />

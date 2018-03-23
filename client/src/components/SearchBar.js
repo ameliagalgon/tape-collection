@@ -1,5 +1,10 @@
 import React, { Component } from 'react';
 
+var throttle = require('throttle-debounce/throttle');
+
+//var debounce = require('throttle-debounce/debounce');
+
+
 class SearchBar extends Component{
   constructor(props){
     super(props);
@@ -7,28 +12,30 @@ class SearchBar extends Component{
       query: '',
       returnItems: []
     }
-
     this.handleChange = this.handleChange.bind(this);
-    //this.props.callback = this.props.callback.bind(this)
   }
-
 
   handleChange(event) {
     this.setState({
       query: event.target.value
     });
+    //this.props.searchFunc(this.state.query);
   }
 
+
   componentDidUpdate(){
-    console.log(this.state.query);
-    //perform a query search
-    //handleSearch(this.state.query);
+
     /*
-    this.props.searchFunc.then(function(){
-      console.log("hello");
-    })
+    throttle(300, function(){
+      console.log(this.state.query);
+      this.props.searchFunc(this.state.query);
+    })();
     */
+    throttle(1000, () => { this.props.searchFunc(this.state.query) })();
+    //this.props.searchFunc(this.state.query);
   }
+
+  //throttle = handleChange.throttle(300);
 
   render(){
     return(

@@ -1,8 +1,11 @@
 import React, { Component } from 'react';
 //import gear from './images/gear.png';
 import './App.css';
-import SpotifyWebApi from 'spotify-web-api-js'
-import { BrowserRouter as Router, Route } from 'react-router-dom'
+import SpotifyWebApi from 'spotify-web-api-js';
+import { BrowserRouter as Router, Route } from 'react-router-dom';
+//import Request from 'superagent'
+import Request from 'axios'
+import Cookies from 'js-cookie';
 
 //components
 import Welcome from './components/Welcome'
@@ -10,6 +13,8 @@ import User from './components/User'
 import Collection from './components/Collection'
 import Menu from './components/Menu'
 import SearchBar from './components/SearchBar'
+//import Sportify
+
 
 const spotifyApi = new SpotifyWebApi();
 
@@ -17,15 +22,25 @@ class App extends Component {
 
   constructor(){
     super();
-    var params = this.getHashParams();
-    console.log(params);
-    var token = params.access_token;
-    if (token) {
+    var token = Cookies.get('access_token');
+    if (token){
       spotifyApi.setAccessToken(token);
+      //spotifyApi.setRefreshToken(refresh_token);
+    } else {
+      var params = this.getHashParams();
+      token = params.access_token;
+      if (token){
+        spotifyApi.setAccessToken(token);
+        Cookies.set('access_token', token);
+        Cookies.set('refresh_token', params.refresh_token);
+      }
     }
+
     this.state = {
       loggedIn : token ? true : false
     }
+
+    this.handleSearch = this.handleSearch.bind(this);
   }
 
   getHashParams(){
@@ -41,19 +56,27 @@ class App extends Component {
     return hashParams;
   }
 
-  getCurrentUser(){
-    var user = spotifyApi.getMe().then(function(response){
-      console.log(response);
-      return response;
-    }).catch(function(){
-      console.log("Error");
+  refreshAccessToken(){
+    var refresh_token = Cookies.get('refresh_token');
+    Request.get('http://localhost:8888/refresh_token/' + refresh_token).then( result => {
+      console.log("REFRESH REQUEST PASSED");
+      var access_token = result.data['access_token'];
+      Cookies.set('access_token', access_token);
+      console.log(Cookies.get('access_token'));
+      spotifyApi.setAccessToken(access_token);
+    }).catch(error => {
+      console.log(error.message);
     });
-    console.log(user);
-    if(user){
-      console.log("in if statement");
-      console.log(user.value);
-    }
-    return user;
+
+  }
+
+  getCurrentUser(){
+    console.log("Getting currentUser");
+    return spotifyApi.getMe().then( response => {return response} )
+      .catch(() => {
+        console.log("Error in getCurrentUser. Need to refresh access token");
+        this.refreshAccessToken();
+      });
   }
 
   getSavedAlbums(){
@@ -65,16 +88,20 @@ class App extends Component {
       // Output items
       console.log(data);
       return data.items;
-    }, function(err) {
-      console.log('Something went wrong!', err);
+    }).catch(error => {
+      console.log(error.message);
+      this.refreshAccessToken();
     });
     return savedAlbums;
   }
 
   handleSearch(query){
-    console.log("query: ", query)
-    spotifyApi.searchTracks(query).then(function(data) {
-      console.log(data);
+    return spotifyApi.searchTracks(query).then((data) => {
+      var albums = data.tracks.items.map(item => item.album);
+      this.setState({
+        albums: albums
+      });
+      console.log(this.state.albums);
     }, function(err) {
       console.error(err);
     });
@@ -105,7 +132,7 @@ class App extends Component {
               )} />
               <Route path="/search" render={() =>(
                 <div className="Search">
-                  <SearchBar searchFunc={ this.handleSearch('love') }/>
+                  <SearchBar searchFunc={ this.handleSearch }/>
                   <div className="returnItems">
 
                   </div>

@@ -7,6 +7,7 @@ class User extends Component {
       currentUser: {},
       profile_url: ''
     }
+
   }
 
   componentDidMount(){
@@ -15,7 +16,10 @@ class User extends Component {
         currentUser,
         profile_url: currentUser.images[0].url
       });
-    })
+    }).catch(error => {
+      console.log(this.state.currentUser);
+      console.log(error);
+    });
   }
 
   render(){

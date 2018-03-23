@@ -16,6 +16,8 @@ class Collection extends Component{
       this.setState({
         albums
       });
+    }).catch(error => {
+      console.log(error);
     })
   }
 

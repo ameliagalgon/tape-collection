@@ -7,7 +7,7 @@ class Menu extends Component{
     return(
         <div className="Menu">
           <Link to="/">Home</Link>
-          <Link to="/collection/:access_token">Collection</Link>
+          <Link to="/collection">Collection</Link>
           <Link to="/search">Search</Link>
           <Link to="/recommendations">Recommendations</Link>
         </div>

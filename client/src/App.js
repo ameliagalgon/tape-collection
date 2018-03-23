@@ -13,6 +13,7 @@ import User from './components/User'
 import Collection from './components/Collection'
 import Menu from './components/Menu'
 import SearchBar from './components/SearchBar'
+import SearchItems from './components/SearchItems'
 //import Sportify
 
 
@@ -97,6 +98,7 @@ class App extends Component {
 
   handleSearch(query){
     return spotifyApi.searchTracks(query).then((data) => {
+      //TODO: do not map duplicates
       var albums = data.tracks.items.map(item => item.album);
       this.setState({
         albums: albums
@@ -133,9 +135,9 @@ class App extends Component {
               <Route path="/search" render={() =>(
                 <div className="Search">
                   <SearchBar searchFunc={ this.handleSearch }/>
-                  <div className="returnItems">
-
-                  </div>
+                  { this.state.albums &&
+                    <SearchItems albums={ this.state.albums } />
+                  }
                 </div>
               )} />
             </div>

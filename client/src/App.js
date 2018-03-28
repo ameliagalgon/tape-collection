@@ -14,7 +14,8 @@ import Collection from './components/Collection'
 import Menu from './components/Menu'
 import SearchBar from './components/SearchBar'
 import SearchItems from './components/SearchItems'
-//import Sportify
+import Recommendations from './components/Recommendations'
+
 
 
 const spotifyApi = new SpotifyWebApi();
@@ -96,6 +97,12 @@ class App extends Component {
     return savedAlbums;
   }
 
+  getRecommendations(){
+    Request.get("http://localhost:8888/recommendations").then(result => {
+      console.log(result);
+    });
+  }
+
   handleSearch(query){
     //TODO: search artists
     return spotifyApi.searchTracks(query).then((data) => {
@@ -104,7 +111,7 @@ class App extends Component {
       var uniqueAlbums = [];
       var uniqueIDs = []
       for(var i = 0; i < albumIDs.length; i++){
-        if(uniqueIDs.indexOf(albumIDs[i]) == -1){
+        if(uniqueIDs.indexOf(albumIDs[i]) === -1){
           uniqueAlbums.push(data.tracks.items[i]);
           uniqueIDs.push(albumIDs[i]);
         }
@@ -151,6 +158,9 @@ class App extends Component {
                     <SearchItems albums={ this.state.albums } />
                   }
                 </div>
+              )} />
+              <Route path="/recommendations" render={() =>(
+                <Recommendations albums={ this.getRecommendations() } />
               )} />
             </div>
 

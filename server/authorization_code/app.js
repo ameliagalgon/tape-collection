@@ -170,5 +170,30 @@ app.get('/refresh_token/:refresh_token', function(req, res) {
   });
 });
 
+app.get('/recommendations', function(req, res) {
+  console.log("IN RECOMMENDATIONS");
+
+  var authOptions = {
+    url: 'https://api.spotify.com/v1/users/ameliagalgon/playlists',
+    headers: {
+      'Authorization': 'Basic ' + access_token
+    },
+    json: true
+  };
+
+  request.get(authOptions, function(error, response, body) {
+    if (!error && response.statusCode === 200) {
+      console.log("HTTP Status code:");
+      console.log(response.statusCode);
+      console.log(body);
+      //res.setHeader('Access-Control-Allow-Origin', '*');
+    }
+    else{
+      console.log("ERROR: "+ error);
+    }
+  });
+
+});
+
 console.log('Listening on 8888');
 app.listen(8888);

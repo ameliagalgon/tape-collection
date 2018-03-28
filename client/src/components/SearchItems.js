@@ -1,13 +1,7 @@
 import React, { Component } from 'react';
-import Collection from './Collection';
 import Cassette from './Cassette'
 
-var renderedAlbums = [];
-
 class SearchCollection extends Component {
-  constructor(){
-    super();
-  }
 
   componentDidMount(){
     console.log(this.props.albums);

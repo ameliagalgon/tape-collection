@@ -2,9 +2,6 @@ import React, { Component } from 'react';
 
 var throttle = require('throttle-debounce/throttle');
 
-var debounce = require('throttle-debounce/debounce');
-
-
 class SearchBar extends Component{
   constructor(props){
     super(props);

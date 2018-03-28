@@ -135,14 +135,17 @@ app.get('/callback', function(req, res) {
   }
 });
 
-app.get('/refresh_token', function(req, res) {
+app.get('/refresh_token/:refresh_token', function(req, res) {
   console.log("in /refresh_token");
 
   // requesting access token from refresh token
-  var refresh_token = req.query.refresh_token;
+  var refresh_token = req.params.refresh_token;
+  console.log('refresh_token: '+ refresh_token);
   var authOptions = {
     url: 'https://accounts.spotify.com/api/token',
-    headers: { 'Authorization': 'Basic ' + (new Buffer(client_id + ':' + client_secret).toString('base64')) },
+    headers: {
+      'Authorization': 'Basic ' + (new Buffer(client_id + ':' + client_secret).toString('base64'))
+    },
     form: {
       grant_type: 'refresh_token',
       refresh_token: refresh_token
@@ -153,9 +156,16 @@ app.get('/refresh_token', function(req, res) {
   request.post(authOptions, function(error, response, body) {
     if (!error && response.statusCode === 200) {
       var access_token = body.access_token;
+      console.log("HTTP Status code:");
+      console.log(response.statusCode);
+      console.log("access_token: " + access_token);
+      res.setHeader('Access-Control-Allow-Origin', '*');
       res.send({
         'access_token': access_token
       });
+    }
+    else{
+      console.log(error);
     }
   });
 });

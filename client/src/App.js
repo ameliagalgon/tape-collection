@@ -97,8 +97,8 @@ class App extends Component {
   }
 
   handleSearch(query){
+    //TODO: search artists
     return spotifyApi.searchTracks(query).then((data) => {
-      //TODO: do not map duplicates
       var albumIDs = data.tracks.items.map(item => item.album.id);
       console.log(albumIDs);
       var uniqueAlbums = [];

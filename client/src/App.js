@@ -99,9 +99,21 @@ class App extends Component {
   handleSearch(query){
     return spotifyApi.searchTracks(query).then((data) => {
       //TODO: do not map duplicates
-      var albums = data.tracks.items.map(item => item.album);
+      var albumIDs = data.tracks.items.map(item => item.album.id);
+      console.log(albumIDs);
+      var uniqueAlbums = [];
+      var uniqueIDs = []
+      for(var i = 0; i < albumIDs.length; i++){
+        if(uniqueIDs.indexOf(albumIDs[i]) == -1){
+          uniqueAlbums.push(data.tracks.items[i]);
+          uniqueIDs.push(albumIDs[i]);
+        }
+      }
+      uniqueAlbums = uniqueAlbums.map(item => item.album);
+      console.log(uniqueIDs);
+      //var albums = uniqueAlbums.map(item => item.album);
       this.setState({
-        albums: albums
+        albums: uniqueAlbums
       });
       console.log(this.state.albums);
     }, function(err) {

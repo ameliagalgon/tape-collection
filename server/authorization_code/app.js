@@ -38,13 +38,11 @@ var stateKey = 'spotify_auth_state';
 
 var app = express();
 
-app.use(express.static(__dirname + '/public'))
+app.use(express.static(path.join(__dirname, '../../client/build')))
    .use(cookieParser());
 
-app.use(express.static(path.join(__dirname, '../client/build')));
-
 app.get('/', function (req, res) {
-  res.sendFile(path.join(__dirname, '../client/build', 'index.html'));
+  res.sendFile(path.join(__dirname, '../../client/build', 'index.html'));
 });
 
 app.get('/login', function(req, res) {
@@ -188,8 +186,7 @@ app.get('/discover_playlist', function(req, res) {
     if (response.statusCode === 200) {
       console.log("HTTP Status code:");
       console.log(response.statusCode);
-      res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
-      res.setHeader('Access-Control-Allow-Credentials', true);
+
       var playlist = body.items.find(playlist => {
         if(playlist.name === "Discover Weekly"){
           return playlist

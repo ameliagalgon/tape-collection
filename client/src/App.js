@@ -98,9 +98,20 @@ class App extends Component {
   }
 
   getRecommendations(){
-    Request.get("http://localhost:8888/recommendations").then(result => {
-      console.log(result);
+    var albums = Request.get("http://localhost:8888/discover_playlist", {
+      withCredentials: true
+    }).then(result => {
+      var playlist_id = result.data.playlist;
+      console.log(playlist_id);
+      var albums = spotifyApi.getPlaylistTracks('spotify', playlist_id).then(result => {
+        var albums = result.items.map(item => item.track.album)
+        console.log(albums);
+        return albums;
+      });
+      return albums;
     });
+
+    return albums;
   }
 
   handleSearch(query){

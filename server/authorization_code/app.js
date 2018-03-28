@@ -53,7 +53,7 @@ app.get('/login', function(req, res) {
   res.cookie(stateKey, state);
 
   // your application requests authorization
-  var scope = 'user-read-birthdate user-read-private user-read-email user-read-playback-state user-library-read';
+  var scope = 'user-read-birthdate user-read-private user-read-email user-read-playback-state user-library-read playlist-read-private playlist-read-collaborative';
   res.redirect('https://accounts.spotify.com/authorize?' +
     querystring.stringify({
       response_type: 'code',
@@ -170,23 +170,36 @@ app.get('/refresh_token/:refresh_token', function(req, res) {
   });
 });
 
-app.get('/recommendations', function(req, res) {
+app.get('/discover_playlist', function(req, res) {
   console.log("IN RECOMMENDATIONS");
+  //console.log('Cookies: ', req.cookies)
 
   var authOptions = {
     url: 'https://api.spotify.com/v1/users/ameliagalgon/playlists',
     headers: {
-      'Authorization': 'Basic ' + access_token
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + req.cookies['access_token']
     },
     json: true
   };
 
   request.get(authOptions, function(error, response, body) {
-    if (!error && response.statusCode === 200) {
+    if (response.statusCode === 200) {
       console.log("HTTP Status code:");
       console.log(response.statusCode);
-      console.log(body);
-      //res.setHeader('Access-Control-Allow-Origin', '*');
+      res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
+      res.setHeader('Access-Control-Allow-Credentials', true);
+      var playlist = body.items.find(playlist => {
+        if(playlist.name === "Discover Weekly"){
+          return playlist
+        }
+      });
+      var playlist_id = playlist.id
+      console.log(playlist);
+      res.send({
+        'id': playlist_id
+      });
     }
     else{
       console.log("ERROR: "+ error);

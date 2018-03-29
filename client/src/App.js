@@ -62,7 +62,7 @@ class App extends Component {
 
   refreshAccessToken(){
     var refresh_token = Cookies.get('refresh_token');
-    Request.get('http://localhost:8888/refresh_token/' + refresh_token).then( result => {
+    Request.get('/refresh_token/' + refresh_token).then( result => {
       console.log("REFRESH REQUEST PASSED");
       var access_token = result.data['access_token'];
       Cookies.set('access_token', access_token);

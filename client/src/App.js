@@ -162,7 +162,7 @@ class App extends Component {
             <div>
             <Welcome />
             <div className="login">
-              <a href="http://localhost:8888/login">Login to Spotify</a>
+              <a href="/login">Login to Spotify</a>
             </div>
             </div>
           }

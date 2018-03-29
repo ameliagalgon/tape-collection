@@ -18,7 +18,7 @@ var cookieParser = require('cookie-parser');
 var client_id = process.env.CLIENT_ID; // Your client id
 var client_secret = process.env.CLIENT_SECRET; // Your secret
 var redirect_uri = process.env.REDIRECT_URI; // Your redirect uri
-
+var port = process.env.PORT;
 /**
  * Generates a random string containing numbers and letters
  * @param  {number} length The length of the string
@@ -205,5 +205,5 @@ app.get('/discover_playlist', function(req, res) {
 
 });
 
-console.log('Listening on 8888');
-app.listen(8888);
+console.log('Listening on ' + port);
+app.listen(port);

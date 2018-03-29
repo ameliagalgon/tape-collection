@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Cassette from './Cassette'
 
-class SearchCollection extends Component {
+class SearchItems extends Component {
 
   componentDidMount(){
     console.log(this.props.albums);
@@ -23,4 +23,4 @@ class SearchCollection extends Component {
   }
 }
 
-export default SearchCollection;
+export default SearchItems;

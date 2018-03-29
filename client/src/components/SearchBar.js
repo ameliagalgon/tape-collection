@@ -22,6 +22,7 @@ class SearchBar extends Component{
     });
     */
     this.props.searchFunc(this.refs.query.value);
+    this.props.searchArtist(this.refs.query.value);
     console.log(this.refs.query.value)
     //throttle(2000, () => { this.props.searchFunc(this.state.query) })();
   }

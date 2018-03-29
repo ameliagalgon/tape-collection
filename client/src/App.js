@@ -15,6 +15,7 @@ import Menu from './components/Menu'
 import SearchBar from './components/SearchBar'
 import SearchItems from './components/SearchItems'
 import Recommendations from './components/Recommendations'
+import RelatedArtist from './components/RelatedArtist'
 
 
 
@@ -43,6 +44,7 @@ class App extends Component {
     }
 
     this.handleSearch = this.handleSearch.bind(this);
+    this.handleArtistSearch = this.handleArtistSearch.bind(this);
   }
 
   getHashParams(){
@@ -98,10 +100,10 @@ class App extends Component {
   }
 
   getRecommendations(){
-    var albums = Request.get("http://localhost:8888/discover_playlist", {
+    var albums = Request.get("/discover_playlist", {
       withCredentials: true
     }).then(result => {
-      var playlist_id = result.data.playlist;
+      var playlist_id = result.data.id;
       console.log(playlist_id);
       var albums = spotifyApi.getPlaylistTracks('spotify', playlist_id).then(result => {
         var albums = result.items.map(item => item.track.album)
@@ -139,6 +141,18 @@ class App extends Component {
     });
   }
 
+  handleArtistSearch(query){
+    spotifyApi.searchArtists(query, {
+      limit: 1
+    }).then(result => {
+      var artist = result.artists.items[0];
+      this.setState({
+        artist: artist
+      });
+      console.log(this.state.artist);
+    })
+  }
+
 
   render() {
     return (
@@ -164,9 +178,13 @@ class App extends Component {
               )} />
               <Route path="/search" render={() =>(
                 <div className="Search">
-                  <SearchBar searchFunc={ this.handleSearch }/>
+                  <SearchBar searchFunc={ this.handleSearch } searchArtist={ this.handleArtistSearch }/>
                   { this.state.albums &&
                     <SearchItems albums={ this.state.albums } />
+                  }
+                  {
+                    this.state.artist &&
+                    <RelatedArtist artist={ this.state.artist } />
                   }
                 </div>
               )} />

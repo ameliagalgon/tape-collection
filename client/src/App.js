@@ -100,9 +100,7 @@ class App extends Component {
   }
 
   getRecommendations(){
-    var albums = Request.get("/discover_playlist", {
-      withCredentials: true
-    }).then(result => {
+    var albums = Request.get("/discover_playlist").then(result => {
       var playlist_id = result.data.id;
       console.log(playlist_id);
       var albums = spotifyApi.getPlaylistTracks('spotify', playlist_id).then(result => {

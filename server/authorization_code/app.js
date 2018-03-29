@@ -38,8 +38,6 @@ var stateKey = 'spotify_auth_state';
 
 var app = express();
 
-app.use(express.static(__dirname + '/public'));
-
 app.use(express.static(path.join(__dirname, '../../client/build')))
    .use(cookieParser());
 
@@ -205,6 +203,10 @@ app.get('/discover_playlist', function(req, res) {
     }
   });
 
+});
+
+app.get('/*', function (req, res) {
+  res.sendFile(path.join(__dirname, '../../client/build', 'index.html'));
 });
 
 console.log('Listening on ' + port);
